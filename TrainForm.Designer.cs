@@ -50,6 +50,7 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.lrNoiseEnabled_checkBox = new System.Windows.Forms.CheckBox();
+            this.lrNoise_dataGridView = new System.Windows.Forms.DataGridView();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.hrRotationEnabled_checkBox = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
@@ -57,6 +58,7 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.lrDownscaleTypes_checkedListBox = new System.Windows.Forms.CheckedListBox();
             this.lrDownscaleEnabled_checkBox = new System.Windows.Forms.CheckBox();
+            this.useHrAsLr_checkBox = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.hrSize_comboBox = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -67,7 +69,6 @@
             this.workers_numericUpDown = new System.Windows.Forms.NumericUpDown();
             this.disableResumeState_checkBox = new System.Windows.Forms.CheckBox();
             this.disablePretrained_checkBox = new System.Windows.Forms.CheckBox();
-            this.useHrAsLr_checkBox = new System.Windows.Forms.CheckBox();
             this.resumeStatePath_button = new System.Windows.Forms.Button();
             this.pretrainedPath_button = new System.Windows.Forms.Button();
             this.valLrPath_button = new System.Windows.Forms.Button();
@@ -99,7 +100,15 @@
             this.label15 = new System.Windows.Forms.Label();
             this.datasetFolderPath_textBox = new System.Windows.Forms.TextBox();
             this.prepareHr_button = new System.Windows.Forms.Button();
-            this.lrNoise_dataGridView = new System.Windows.Forms.DataGridView();
+            this.groupBox13 = new System.Windows.Forms.GroupBox();
+            this.networkModels_comboBox = new System.Windows.Forms.ComboBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.trainConfig_propertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.train_propertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.trainDataset_propertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.networkD_propertyGrid = new System.Windows.Forms.PropertyGrid();
+            this.networkG_propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -113,6 +122,7 @@
             this.tabPage2.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lrNoise_dataGridView)).BeginInit();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox5.SuspendLayout();
@@ -124,7 +134,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.workers_numericUpDown)).BeginInit();
             this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.validationTileNumber_numericUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lrNoise_dataGridView)).BeginInit();
+            this.groupBox13.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -132,12 +144,14 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
+            this.tabControl1.Controls.Add(this.tabPage4);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(728, 602);
+            this.tabControl1.Size = new System.Drawing.Size(728, 546);
             this.tabControl1.TabIndex = 0;
+            this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
             // tabPage1
             // 
@@ -145,7 +159,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(720, 576);
+            this.tabPage1.Size = new System.Drawing.Size(720, 520);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Train";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -164,7 +178,7 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 95.09306F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 4.906938F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(714, 570);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(714, 514);
             this.tableLayoutPanel1.TabIndex = 45;
             // 
             // log_richTextBox
@@ -176,9 +190,10 @@
             this.log_richTextBox.Location = new System.Drawing.Point(323, 3);
             this.log_richTextBox.Name = "log_richTextBox";
             this.log_richTextBox.ReadOnly = true;
-            this.log_richTextBox.Size = new System.Drawing.Size(388, 517);
+            this.log_richTextBox.Size = new System.Drawing.Size(388, 463);
             this.log_richTextBox.TabIndex = 1;
             this.log_richTextBox.Text = "";
+            this.log_richTextBox.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // panel1
             // 
@@ -195,13 +210,13 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(3, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(314, 517);
+            this.panel1.Size = new System.Drawing.Size(314, 463);
             this.panel1.TabIndex = 0;
             // 
             // deleteConfig_button
             // 
             this.deleteConfig_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.deleteConfig_button.Location = new System.Drawing.Point(162, 491);
+            this.deleteConfig_button.Location = new System.Drawing.Point(162, 437);
             this.deleteConfig_button.Name = "deleteConfig_button";
             this.deleteConfig_button.Size = new System.Drawing.Size(147, 23);
             this.deleteConfig_button.TabIndex = 49;
@@ -211,26 +226,27 @@
             // saveConfigName_textBox
             // 
             this.saveConfigName_textBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveConfigName_textBox.Location = new System.Drawing.Point(162, 341);
+            this.saveConfigName_textBox.Location = new System.Drawing.Point(162, 287);
             this.saveConfigName_textBox.Name = "saveConfigName_textBox";
             this.saveConfigName_textBox.Size = new System.Drawing.Size(147, 20);
             this.saveConfigName_textBox.TabIndex = 48;
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(14, 21);
+            this.button5.Location = new System.Drawing.Point(3, 21);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(282, 81);
+            this.button5.Size = new System.Drawing.Size(306, 84);
             this.button5.TabIndex = 47;
             this.button5.Text = "TEST";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Visible = false;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // configs_listBox
             // 
             this.configs_listBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.configs_listBox.FormattingEnabled = true;
-            this.configs_listBox.Location = new System.Drawing.Point(3, 341);
+            this.configs_listBox.Location = new System.Drawing.Point(3, 287);
             this.configs_listBox.Name = "configs_listBox";
             this.configs_listBox.Size = new System.Drawing.Size(153, 173);
             this.configs_listBox.TabIndex = 46;
@@ -239,7 +255,7 @@
             // saveConfig_button
             // 
             this.saveConfig_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.saveConfig_button.Location = new System.Drawing.Point(162, 365);
+            this.saveConfig_button.Location = new System.Drawing.Point(162, 311);
             this.saveConfig_button.Name = "saveConfig_button";
             this.saveConfig_button.Size = new System.Drawing.Size(147, 61);
             this.saveConfig_button.TabIndex = 45;
@@ -249,7 +265,7 @@
             // loadConfig_button
             // 
             this.loadConfig_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.loadConfig_button.Location = new System.Drawing.Point(162, 429);
+            this.loadConfig_button.Location = new System.Drawing.Point(162, 375);
             this.loadConfig_button.Name = "loadConfig_button";
             this.loadConfig_button.Size = new System.Drawing.Size(147, 61);
             this.loadConfig_button.TabIndex = 45;
@@ -264,7 +280,6 @@
             this.startTrain_button.TabIndex = 1;
             this.startTrain_button.Text = "Start training";
             this.startTrain_button.UseVisualStyleBackColor = true;
-            this.startTrain_button.Click += new System.EventHandler(this.startTrain_button_Click);
             // 
             // groupBox11
             // 
@@ -278,6 +293,11 @@
             // 
             // printStep_numericUpDown
             // 
+            this.printStep_numericUpDown.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
             this.printStep_numericUpDown.Location = new System.Drawing.Point(6, 18);
             this.printStep_numericUpDown.Maximum = new decimal(new int[] {
             9999,
@@ -310,6 +330,11 @@
             // 
             // saveStep_numericUpDown
             // 
+            this.saveStep_numericUpDown.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             this.saveStep_numericUpDown.Location = new System.Drawing.Point(6, 18);
             this.saveStep_numericUpDown.Maximum = new decimal(new int[] {
             999999,
@@ -342,6 +367,11 @@
             // 
             // valStep_numericUpDown
             // 
+            this.valStep_numericUpDown.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             this.valStep_numericUpDown.Location = new System.Drawing.Point(6, 19);
             this.valStep_numericUpDown.Maximum = new decimal(new int[] {
             999999,
@@ -365,6 +395,7 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.groupBox4);
+            this.tabPage2.Controls.Add(this.groupBox13);
             this.tabPage2.Controls.Add(this.groupBox3);
             this.tabPage2.Controls.Add(this.groupBox2);
             this.tabPage2.Controls.Add(this.groupBox12);
@@ -397,7 +428,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(720, 576);
+            this.tabPage2.Size = new System.Drawing.Size(720, 520);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Config";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -438,6 +469,23 @@
             this.lrNoiseEnabled_checkBox.Text = "Enable";
             this.lrNoiseEnabled_checkBox.UseVisualStyleBackColor = true;
             this.lrNoiseEnabled_checkBox.CheckedChanged += new System.EventHandler(this.lrNoiseEnabled_checkBox_CheckedChanged);
+            // 
+            // lrNoise_dataGridView
+            // 
+            this.lrNoise_dataGridView.AllowUserToAddRows = false;
+            this.lrNoise_dataGridView.AllowUserToDeleteRows = false;
+            this.lrNoise_dataGridView.AllowUserToResizeColumns = false;
+            this.lrNoise_dataGridView.AllowUserToResizeRows = false;
+            this.lrNoise_dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lrNoise_dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.lrNoise_dataGridView.ColumnHeadersVisible = false;
+            this.lrNoise_dataGridView.Location = new System.Drawing.Point(10, 40);
+            this.lrNoise_dataGridView.MultiSelect = false;
+            this.lrNoise_dataGridView.Name = "lrNoise_dataGridView";
+            this.lrNoise_dataGridView.RowHeadersVisible = false;
+            this.lrNoise_dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.lrNoise_dataGridView.Size = new System.Drawing.Size(95, 175);
+            this.lrNoise_dataGridView.TabIndex = 43;
             // 
             // groupBox8
             // 
@@ -516,6 +564,18 @@
             this.lrDownscaleEnabled_checkBox.Text = "Enable";
             this.lrDownscaleEnabled_checkBox.UseVisualStyleBackColor = true;
             this.lrDownscaleEnabled_checkBox.CheckedChanged += new System.EventHandler(this.lrDownscaleEnabled_checkBox_CheckedChanged);
+            // 
+            // useHrAsLr_checkBox
+            // 
+            this.useHrAsLr_checkBox.AutoSize = true;
+            this.useHrAsLr_checkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.useHrAsLr_checkBox.Location = new System.Drawing.Point(284, 19);
+            this.useHrAsLr_checkBox.Name = "useHrAsLr_checkBox";
+            this.useHrAsLr_checkBox.Size = new System.Drawing.Size(92, 17);
+            this.useHrAsLr_checkBox.TabIndex = 39;
+            this.useHrAsLr_checkBox.Text = "Use HR as LR";
+            this.useHrAsLr_checkBox.UseVisualStyleBackColor = true;
+            this.useHrAsLr_checkBox.CheckedChanged += new System.EventHandler(this.useHrAsLr_checkBox_CheckedChanged);
             // 
             // groupBox3
             // 
@@ -649,18 +709,6 @@
             this.disablePretrained_checkBox.Text = "Disable";
             this.disablePretrained_checkBox.UseVisualStyleBackColor = true;
             this.disablePretrained_checkBox.CheckedChanged += new System.EventHandler(this.disablePretrained_checkBox_CheckedChanged);
-            // 
-            // useHrAsLr_checkBox
-            // 
-            this.useHrAsLr_checkBox.AutoSize = true;
-            this.useHrAsLr_checkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.useHrAsLr_checkBox.Location = new System.Drawing.Point(284, 19);
-            this.useHrAsLr_checkBox.Name = "useHrAsLr_checkBox";
-            this.useHrAsLr_checkBox.Size = new System.Drawing.Size(92, 17);
-            this.useHrAsLr_checkBox.TabIndex = 39;
-            this.useHrAsLr_checkBox.Text = "Use HR as LR";
-            this.useHrAsLr_checkBox.UseVisualStyleBackColor = true;
-            this.useHrAsLr_checkBox.CheckedChanged += new System.EventHandler(this.useHrAsLr_checkBox_CheckedChanged);
             // 
             // resumeStatePath_button
             // 
@@ -893,7 +941,7 @@
             this.tabPage3.Controls.Add(this.prepareHr_button);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(720, 576);
+            this.tabPage3.Size = new System.Drawing.Size(720, 520);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Dataset";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -922,13 +970,13 @@
             // ignoreFewColorsTiles_checkBox
             // 
             this.ignoreFewColorsTiles_checkBox.AutoSize = true;
-            this.ignoreFewColorsTiles_checkBox.Enabled = false;
             this.ignoreFewColorsTiles_checkBox.Location = new System.Drawing.Point(62, 44);
             this.ignoreFewColorsTiles_checkBox.Name = "ignoreFewColorsTiles_checkBox";
             this.ignoreFewColorsTiles_checkBox.Size = new System.Drawing.Size(150, 17);
             this.ignoreFewColorsTiles_checkBox.TabIndex = 55;
             this.ignoreFewColorsTiles_checkBox.Text = "Ignore tiles with few colors";
             this.ignoreFewColorsTiles_checkBox.UseVisualStyleBackColor = true;
+            this.ignoreFewColorsTiles_checkBox.Visible = false;
             // 
             // datasetFolderPath_button
             // 
@@ -970,28 +1018,113 @@
             this.prepareHr_button.UseVisualStyleBackColor = true;
             this.prepareHr_button.Click += new System.EventHandler(this.prepareHr_button_Click);
             // 
-            // lrNoise_dataGridView
+            // groupBox13
             // 
-            this.lrNoise_dataGridView.AllowUserToAddRows = false;
-            this.lrNoise_dataGridView.AllowUserToDeleteRows = false;
-            this.lrNoise_dataGridView.AllowUserToResizeColumns = false;
-            this.lrNoise_dataGridView.AllowUserToResizeRows = false;
-            this.lrNoise_dataGridView.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lrNoise_dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.lrNoise_dataGridView.ColumnHeadersVisible = false;
-            this.lrNoise_dataGridView.Location = new System.Drawing.Point(10, 40);
-            this.lrNoise_dataGridView.MultiSelect = false;
-            this.lrNoise_dataGridView.Name = "lrNoise_dataGridView";
-            this.lrNoise_dataGridView.RowHeadersVisible = false;
-            this.lrNoise_dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.lrNoise_dataGridView.Size = new System.Drawing.Size(95, 175);
-            this.lrNoise_dataGridView.TabIndex = 43;
+            this.groupBox13.Controls.Add(this.networkModels_comboBox);
+            this.groupBox13.Location = new System.Drawing.Point(421, 232);
+            this.groupBox13.Name = "groupBox13";
+            this.groupBox13.Size = new System.Drawing.Size(108, 44);
+            this.groupBox13.TabIndex = 42;
+            this.groupBox13.TabStop = false;
+            this.groupBox13.Text = "Network";
+            // 
+            // networkModels_comboBox
+            // 
+            this.networkModels_comboBox.FormattingEnabled = true;
+            this.networkModels_comboBox.Items.AddRange(new object[] {
+            "128",
+            "192"});
+            this.networkModels_comboBox.Location = new System.Drawing.Point(6, 18);
+            this.networkModels_comboBox.Name = "networkModels_comboBox";
+            this.networkModels_comboBox.Size = new System.Drawing.Size(92, 21);
+            this.networkModels_comboBox.TabIndex = 43;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.tableLayoutPanel2);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(720, 520);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "Advanced config";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // trainConfig_propertyGrid
+            // 
+            this.trainConfig_propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trainConfig_propertyGrid.HelpVisible = false;
+            this.trainConfig_propertyGrid.Location = new System.Drawing.Point(3, 3);
+            this.trainConfig_propertyGrid.Name = "trainConfig_propertyGrid";
+            this.trainConfig_propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+            this.trainConfig_propertyGrid.Size = new System.Drawing.Size(233, 79);
+            this.trainConfig_propertyGrid.TabIndex = 60;
+            this.trainConfig_propertyGrid.ToolbarVisible = false;
+            // 
+            // train_propertyGrid
+            // 
+            this.train_propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.train_propertyGrid.Location = new System.Drawing.Point(242, 3);
+            this.train_propertyGrid.Name = "train_propertyGrid";
+            this.tableLayoutPanel2.SetRowSpan(this.train_propertyGrid, 3);
+            this.train_propertyGrid.Size = new System.Drawing.Size(233, 514);
+            this.train_propertyGrid.TabIndex = 60;
+            // 
+            // trainDataset_propertyGrid
+            // 
+            this.trainDataset_propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.trainDataset_propertyGrid.Location = new System.Drawing.Point(3, 88);
+            this.trainDataset_propertyGrid.Name = "trainDataset_propertyGrid";
+            this.trainDataset_propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+            this.tableLayoutPanel2.SetRowSpan(this.trainDataset_propertyGrid, 2);
+            this.trainDataset_propertyGrid.Size = new System.Drawing.Size(233, 429);
+            this.trainDataset_propertyGrid.TabIndex = 60;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 3;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel2.Controls.Add(this.trainConfig_propertyGrid, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.train_propertyGrid, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.trainDataset_propertyGrid, 0, 1);
+            this.tableLayoutPanel2.Controls.Add(this.networkD_propertyGrid, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.networkG_propertyGrid, 2, 2);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 3;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 85F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(720, 520);
+            this.tableLayoutPanel2.TabIndex = 61;
+            // 
+            // networkD_propertyGrid
+            // 
+            this.networkD_propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.networkD_propertyGrid.HelpVisible = false;
+            this.networkD_propertyGrid.Location = new System.Drawing.Point(481, 3);
+            this.networkD_propertyGrid.Name = "networkD_propertyGrid";
+            this.networkD_propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
+            this.tableLayoutPanel2.SetRowSpan(this.networkD_propertyGrid, 2);
+            this.networkD_propertyGrid.Size = new System.Drawing.Size(236, 109);
+            this.networkD_propertyGrid.TabIndex = 61;
+            this.networkD_propertyGrid.ToolbarVisible = false;
+            // 
+            // networkG_propertyGrid
+            // 
+            this.networkG_propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.networkG_propertyGrid.Location = new System.Drawing.Point(481, 118);
+            this.networkG_propertyGrid.Name = "networkG_propertyGrid";
+            this.networkG_propertyGrid.Size = new System.Drawing.Size(236, 399);
+            this.networkG_propertyGrid.TabIndex = 62;
             // 
             // TrainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(728, 602);
+            this.ClientSize = new System.Drawing.Size(728, 546);
             this.Controls.Add(this.tabControl1);
             this.MinimumSize = new System.Drawing.Size(740, 580);
             this.Name = "TrainForm";
@@ -1013,6 +1146,7 @@
             this.groupBox4.PerformLayout();
             this.groupBox6.ResumeLayout(false);
             this.groupBox6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.lrNoise_dataGridView)).EndInit();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -1028,7 +1162,9 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.validationTileNumber_numericUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.lrNoise_dataGridView)).EndInit();
+            this.groupBox13.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1107,5 +1243,14 @@
         private System.Windows.Forms.TextBox saveConfigName_textBox;
         private System.Windows.Forms.Button deleteConfig_button;
         private System.Windows.Forms.DataGridView lrNoise_dataGridView;
+        private System.Windows.Forms.GroupBox groupBox13;
+        private System.Windows.Forms.ComboBox networkModels_comboBox;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.PropertyGrid trainDataset_propertyGrid;
+        private System.Windows.Forms.PropertyGrid train_propertyGrid;
+        private System.Windows.Forms.PropertyGrid trainConfig_propertyGrid;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.PropertyGrid networkD_propertyGrid;
+        private System.Windows.Forms.PropertyGrid networkG_propertyGrid;
     }
 }

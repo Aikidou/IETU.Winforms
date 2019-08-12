@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Reactive.Linq;
@@ -100,8 +99,8 @@ namespace ImageEnhancingUtility.Train.Winforms
             this.Bind(ViewModel, vm => vm.TrainConfig.Datasets.Train.DatarootLR, v => v.lrPath_textBox.Text);
             this.Bind(ViewModel, vm => vm.TrainConfig.Datasets.Val.DatarootHR, v => v.valHrPath_textBox.Text);
             this.Bind(ViewModel, vm => vm.TrainConfig.Datasets.Val.DatarootLR, v => v.valLrPath_textBox.Text);
-            this.Bind(ViewModel, vm => vm.TrainConfig.Path.PretrainModelG, v => v.pretrainedPath_textBox.Text);
-            this.Bind(ViewModel, vm => vm.TrainConfig.Path.ResumeState, v => v.resumeStatePath_textBox.Text);
+            this.Bind(ViewModel, vm => vm.TrainConfig.IETUSettings.PretrainModelG, v => v.pretrainedPath_textBox.Text);
+            this.Bind(ViewModel, vm => vm.TrainConfig.IETUSettings.ResumeState, v => v.resumeStatePath_textBox.Text);
             this.Bind(ViewModel, vm => vm.TrainConfig.Name, v => v.modelName_textBox.Text);
 
             modelScale_comboBox.DataSource = IETU.ScaleSizes;
@@ -117,9 +116,9 @@ namespace ImageEnhancingUtility.Train.Winforms
             this.Bind(ViewModel, vm => vm.TrainConfig.Datasets.Train.HrCrop, v => v.hrCropEnabled_checkBox.Checked);
             this.Bind(ViewModel, vm => vm.TrainConfig.Datasets.Train.HrRrot, v => v.hrRotationEnabled_checkBox.Checked);
 
-            this.Bind(ViewModel, vm => vm.UseHrAsLr, v => v.useHrAsLr_checkBox.Checked);
-            this.Bind(ViewModel, vm => vm.DisablePretrainedModel, v => v.disablePretrained_checkBox.Checked);
-            this.Bind(ViewModel, vm => vm.DisableResumeState, v => v.disableResumeState_checkBox.Checked);
+            this.Bind(ViewModel, vm => vm.TrainConfig.IETUSettings.UseHrAsLr, v => v.useHrAsLr_checkBox.Checked);
+            this.Bind(ViewModel, vm => vm.TrainConfig.IETUSettings.DisablePretrainedModel, v => v.disablePretrained_checkBox.Checked);
+            this.Bind(ViewModel, vm => vm.TrainConfig.IETUSettings.DisableResumeState, v => v.disableResumeState_checkBox.Checked);
 
             this.Bind(ViewModel, vm => vm.Configs, v => v.configs_listBox.DataSource);
             configs_listBox.ValueMember = "Name";
@@ -129,16 +128,17 @@ namespace ImageEnhancingUtility.Train.Winforms
             this.Bind(ViewModel, vm => vm.SelectedConfigName, v => v.configs_listBox.SelectedValue, x => x, x => x?.ToString());
 
             this.BindCommand(ViewModel, vm => vm.SaveConfigCommand, v => v.saveConfig_button);
-            ViewModel.SaveConfigCommand.ThrownExceptions.Subscribe(exception => { });
+            ViewModel.SaveConfigCommand.ThrownExceptions.Subscribe(exception => { ViewModel.Core.WriteToLogsThreadSafe(exception.Message); });
             this.BindCommand(ViewModel, vm => vm.LoadConfigCommand, v => v.loadConfig_button);
-            ViewModel.LoadConfigCommand.ThrownExceptions.Subscribe(exception => { throw exception; });
+            ViewModel.LoadConfigCommand.ThrownExceptions.Subscribe(exception => { ViewModel.Core.WriteToLogsThreadSafe(exception.Message); });
             this.BindCommand(ViewModel, vm => vm.DeleteConfigCommand, v => v.deleteConfig_button);
-            ViewModel.DeleteConfigCommand.ThrownExceptions.Subscribe(exception => { });
+            ViewModel.DeleteConfigCommand.ThrownExceptions.Subscribe(exception => { ViewModel.Core.WriteToLogsThreadSafe(exception.Message); });
+            this.BindCommand(ViewModel, vm => vm.TrainCommand, v => v.startTrain_button);
+            ViewModel.DeleteConfigCommand.ThrownExceptions.Subscribe(exception => { ViewModel.Core.WriteToLogsThreadSafe(exception.Message); });
 
             lrDownscaleTypes_checkedListBox.DataSource = Enum.GetValues(typeof(DownscaleType));
             lrDownscaleTypes_checkedListBox.Enabled = false;
             this.OneWayBind(ViewModel, vm => vm.TrainConfig.Datasets.Train.LrDownscaleTypes, v => v.CheckedDownscaleTypes, x => x.Cast<int>().ToList());
-
 
             lrNoise_dataGridView.DataSource = ViewModel.NoiseValues;
             lrNoise_dataGridView.Columns[0].ReadOnly = true;
@@ -148,8 +148,17 @@ namespace ImageEnhancingUtility.Train.Winforms
             lrNoise_dataGridView.Enabled = false;
             lrNoise_dataGridView.DefaultCellStyle = GridDisabled;
 
-            this.OneWayBind(ViewModel, vm => vm.Core.Logs, v => v.RichBoxText);
 
+            this.OneWayBind(ViewModel, vm => vm.TrainConfig, v => v.trainConfig_propertyGrid.SelectedObject);
+            this.OneWayBind(ViewModel, vm => vm.TrainConfig.Datasets.Train, v => v.trainDataset_propertyGrid.SelectedObject);
+            this.OneWayBind(ViewModel, vm => vm.TrainConfig.Train, v => v.train_propertyGrid.SelectedObject);
+            this.OneWayBind(ViewModel, vm => vm.TrainConfig.NetworkD, v => v.networkD_propertyGrid.SelectedObject);
+            this.OneWayBind(ViewModel, vm => vm.TrainConfig.NetworkG, v => v.networkG_propertyGrid.SelectedObject);
+
+            networkModels_comboBox.DataSource = IETU.NetworkModels;
+            this.Bind(ViewModel, vm => vm.TrainConfig.Model, v => v.networkModels_comboBox.SelectedIndex, z => IETU.NetworkModels.IndexOf(z), z => IETU.NetworkModels[z]);           
+
+            this.OneWayBind(ViewModel, vm => vm.Core.Logs, v => v.RichBoxText);           
         }
 
         private void lrDownscaleTypes_checkedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -233,11 +242,16 @@ namespace ImageEnhancingUtility.Train.Winforms
             log_richTextBox.SelectionStart = log_richTextBox.Text.Length;
             // scroll it automatically
             log_richTextBox.ScrollToCaret();
-        }
+        }       
 
-        private void startTrain_button_Click(object sender, EventArgs e)
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ViewModel.StartTrain();
+            if (tabControl1.SelectedIndex == 3)
+            {
+                trainConfig_propertyGrid.Refresh();
+                trainDataset_propertyGrid.Refresh();
+                train_propertyGrid.Refresh();
+            }
         }
     }
 
