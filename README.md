@@ -1,2 +1,2 @@
-# IETU.Winforms - Image Enhancing Training Utilities
+# IETU.Winforms - Image Enhancing Training Utility
 Windows only GUI for training BasicSR models
